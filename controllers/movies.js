@@ -33,12 +33,6 @@ const deleteMovie = (req, res, next) => {
       if (!movie) {
         throw new NotFoundError('Нет фильма с таким id');
       }
-      const movieOwnerId = movie.owner.toString();
-      if (movieOwnerId !== req.user._id) {
-        const error = new Error('Вы не можете удалить этот фильм');
-        error.statusCode = 403;
-        throw error;
-      }
       return movie;
     })
     .then(() => Movie.findByIdAndDelete(id))
