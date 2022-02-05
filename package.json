@@ -4,6 +4,7 @@
   "description": "Бэкенд часть дипломного проекта на Яндекс-Практикум",
   "main": "app.js",
   "scripts": {
+    "fix-code": "prettier-eslint --write './**/*.{js,jsx}' ",
     "lint": "npx eslint .",
     "start": "node app.js",
     "dev": "nodemon app.js"

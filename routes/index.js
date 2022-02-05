@@ -2,11 +2,15 @@ const router = require('express').Router();
 const usersRouter = require('./users');
 const moviesRouter = require('./movies');
 const auth = require('../middleware/auth');
+const { register, login } = require('../controllers/users');
 const NotFoundError = require('../errors/NotFoundError');
 
 router.get('/', (req, res) => {
   res.status(200).send('Hello');
 });
+
+router.post('/signup', register);
+router.post('/signin', login);
 
 router.use(auth);
 
