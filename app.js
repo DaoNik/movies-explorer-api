@@ -4,12 +4,18 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 const router = require('./routes/index');
+const { requestLogger, errorLogger } = require('./middleware/logger');
 
 const { PORT = 3001 } = process.env;
 
 const app = express();
 app.use(bodyParser.json());
+
+app.use(requestLogger);
+
 app.use(router);
+
+app.use(errorLogger);
 
 app.use((err, req, res, next) => {
   // если у ошибки нет статуса, выставляем 500
