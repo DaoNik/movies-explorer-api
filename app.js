@@ -1,10 +1,11 @@
 require('dotenv').config();
 const express = require('express');
-// const path = require('path');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 const router = require('./routes/index');
 const { requestLogger, errorLogger } = require('./middleware/logger');
+const handleAllowedCors = require('./middleware/handleAllowedCors');
+const handleErrors = require('./middleware/handleErrors');
 
 const { PORT = 3000 } = process.env;
 
@@ -13,21 +14,13 @@ app.use(bodyParser.json());
 
 app.use(requestLogger);
 
+app.use(handleAllowedCors);
+
 app.use(router);
 
 app.use(errorLogger);
 
-app.use((err, req, res, next) => {
-  // если у ошибки нет статуса, выставляем 500
-  const { statusCode = 500, message } = err;
-
-  res.status(statusCode).send({
-    // проверяем статус и выставляем сообщение в зависимости от него
-    message: statusCode === 500 ? 'На сервере произошла ошибка' : message,
-  });
-
-  next();
-});
+app.use(handleErrors);
 
 async function start() {
   try {
