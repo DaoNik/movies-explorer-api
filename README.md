@@ -4,4 +4,4 @@
 
 ### Доменное имя бэкенд части
 
-api.daonik.nomoredomains.work
+https://api.daonik.nomoredomains.work
