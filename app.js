@@ -8,6 +8,7 @@ const handleAllowedCors = require('./middleware/handleAllowedCors');
 const handleErrors = require('./middleware/handleErrors');
 
 const { PORT = 3000 } = process.env;
+const { MONGO_URL = 'mongodb://localhost:27017/bitfilmsdb' } = process.env;
 
 const app = express();
 app.use(bodyParser.json());
@@ -24,7 +25,7 @@ app.use(handleErrors);
 
 async function start() {
   try {
-    await mongoose.connect('mongodb://localhost:27017/bitfilmsdb', {
+    await mongoose.connect(MONGO_URL, {
       useNewUrlParser: true,
       useUnifiedTopology: true,
     });
