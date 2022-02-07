@@ -1,6 +1,7 @@
 const Movie = require('../models/Movie');
 const NotFoundError = require('../errors/NotFoundError');
 const ValidationError = require('../errors/ValidationError');
+const AllowsError = require('../errors/AllowsError');
 
 const getMovies = (req, res, next) => {
   Movie.find({})
@@ -32,6 +33,10 @@ const deleteMovie = (req, res, next) => {
     .then((movie) => {
       if (!movie) {
         throw new NotFoundError('Нет фильма с таким id');
+      }
+      const movieOwnerId = movie.owner.toString();
+      if (movieOwnerId !== req.user._id) {
+        throw new AllowsError('Вы не можете удалить эту карточку');
       }
       return movie;
     })
