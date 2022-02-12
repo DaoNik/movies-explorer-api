@@ -15,7 +15,7 @@ const { MONGO_URL = 'mongodb://localhost:27017/bitfilmsdb' } = process.env;
 
 const app = express();
 app.use(bodyParser.json());
-// app.use(helmet());
+app.use(helmet());
 // app.use(limiter);
 
 app.use(requestLogger);
