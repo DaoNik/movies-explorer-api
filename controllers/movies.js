@@ -8,7 +8,7 @@ const getMovies = (req, res, next) => {
     .where('owner')
     .equals(req.user._id)
     .then((movies) => {
-      res.status(200).send(movies);
+      res.send(movies);
     })
     .catch(next);
 };
@@ -16,13 +16,13 @@ const getMovies = (req, res, next) => {
 const createMovie = (req, res, next) => {
   Movie.create({ ...req.body, owner: req.user._id })
     .then((movie) => {
-      res.status(201).send(movie);
+      res.send(movie);
     })
     .catch((err) => {
       if (err.name === 'ValidationError') {
-        next(new ValidationError('Неверно введены данные для фильма'));
+        return next(new ValidationError('Неверно введены данные для фильма'));
       }
-      next(err);
+      return next(err);
     });
 };
 
@@ -41,14 +41,13 @@ const deleteMovie = (req, res, next) => {
       return movie;
     })
     .then(() => Movie.findByIdAndDelete(id))
-    .then((movie) => res.status(200).send(movie))
+    .then((movie) => res.send(movie))
     .catch((err) => {
       if (err.name === 'CastError') {
-        next(new ValidationError('Невалидный id фильма'));
-      } else if (err.name === 'NotFoundError') {
-        next(new NotFoundError('Неверный идентификатор фильма'));
+        return next(new ValidationError('Невалидный id фильма'));
       }
-      next(err);
+
+      return next(err);
     });
 };
 

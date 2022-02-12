@@ -26,7 +26,7 @@ router.post(
       thumbnail: Joi.string()
         .required()
         .pattern(/^(http|https):\/\/(www){0,1}\.?\w+\.\S+/),
-      movieId: Joi.string().required().length(24).hex(),
+      movieId: Joi.number().required(),
       nameRU: Joi.string().required(),
       nameEN: Joi.string().required(),
     }),

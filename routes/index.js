@@ -7,7 +7,7 @@ const { register, login } = require('../controllers/users');
 const NotFoundError = require('../errors/NotFoundError');
 
 router.get('/', (req, res) => {
-  res.status(200).send('Hello');
+  res.send('Hello');
 });
 
 router.post(

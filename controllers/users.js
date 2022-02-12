@@ -28,12 +28,17 @@ const register = (req, res, next) => {
     })
     .catch((err) => {
       if (err.name === 'ValidationError') {
-        next(new ValidationError('Неверно введены данные для пользователя'));
-      } else if (err.name === 'MongoServerError' && err.code === 11000) {
-        next(new ConflictError('Данный пользователь уже зарегистрирован'));
+        return next(
+          new ValidationError('Неверно введены данные для пользователя')
+        );
+      }
+      if (err.name === 'MongoServerError' && err.code === 11000) {
+        return next(
+          new ConflictError('Данный пользователь уже зарегистрирован')
+        );
       }
 
-      next(err);
+      return next(err);
     });
 };
 
@@ -54,7 +59,7 @@ const login = (req, res, next) => {
         const token = jwt.sign({ _id: user._id }, JWT_SECRET, {
           expiresIn: '7d',
         });
-        return res.status(200).send({ token });
+        return res.send({ token });
       });
     })
     .catch(next);
@@ -67,16 +72,16 @@ const getUser = (req, res, next) => {
       if (!user) {
         throw new NotFoundError('Нет пользователя с таким id');
       }
-      return res.status(200).send(user);
+      return res.send(user);
     })
     .catch((err) => {
       if (err.name === 'CastError') {
-        next(new ValidationError('Невалидный id пользователя'));
-      } else if (err.name === 'NotFoundError') {
-        next(new NotFoundError('Неверный идентификатор пользователя'));
-      } else {
-        next(err);
+        return next(new ValidationError('Невалидный id пользователя'));
       }
+      if (err.name === 'NotFoundError') {
+        return next(new NotFoundError('Неверный идентификатор пользователя'));
+      }
+      return next(err);
     });
 };
 
@@ -91,16 +96,23 @@ const patchUser = (req, res, next) => {
       if (!user) {
         throw new NotFoundError('Нет пользователя с таким id');
       }
-      return res.status(200).send(user);
+      return res.send(user);
     })
     .catch((err) => {
       if (err.name === 'ValidationError') {
-        next(new ValidationError('Неверно введены данные для пользователя'));
-      } else if (err.name === 'CastError') {
-        next(new ValidationError('Неверный идентификатор пользователя'));
-      } else {
-        next(err);
+        return next(
+          new ValidationError('Неверно введены данные для пользователя')
+        );
       }
+      if (err.name === 'CastError') {
+        return next(new ValidationError('Неверный идентификатор пользователя'));
+      }
+      if (err.name === 'MongoServerError' && err.code === 11000) {
+        return next(
+          new ConflictError('Вы не можете обновить данные другого пользователя')
+        );
+      }
+      return next(err);
     });
 };
 
