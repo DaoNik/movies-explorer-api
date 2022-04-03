@@ -12,14 +12,7 @@ const register = (req, res, next) => {
   const { email, password, name } = req.body;
   bcrypt
     .hash(password, 10)
-    .then((hash) => {
-      console.log(email, name);
-      return User.create({
-        email,
-        password: hash,
-        name,
-      });
-    })
+    .then((hash) => User.create({ email, password: hash, name }))
     .then((user) => {
       console.log(user);
       const newUser = user.toObject();
@@ -55,11 +48,11 @@ const login = (req, res, next) => {
         if (!matched) {
           throw new AuthorizationError('Неправильные почта или пароль');
         }
-
+        const { name } = user;
         const token = jwt.sign({ _id: user._id }, JWT_SECRET, {
           expiresIn: '7d',
         });
-        return res.send({ token });
+        return res.send({ token, name });
       });
     })
     .catch(next);
@@ -87,6 +80,7 @@ const getUser = (req, res, next) => {
 
 const patchUser = (req, res, next) => {
   const { email, name } = req.body;
+  console.log(email, name, req.body);
   return User.findByIdAndUpdate(
     req.user._id,
     { name, email },

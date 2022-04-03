@@ -1,8 +1,10 @@
 const allowedCors = [
+  'http://localhost:3001',
   'http://daonik.nomoredomains.work',
   'https://daonik.nomoredomains.work',
 ];
 
+// eslint-disable-next-line consistent-return
 module.exports = (req, res, next) => {
   const { origin } = req.headers;
   // Сохраняем источник запроса в переменную origin
@@ -26,7 +28,7 @@ module.exports = (req, res, next) => {
     // разрешаем кросс-доменные запросы с этими заголовками
     res.header('Access-Control-Allow-Headers', requestHeaders);
     // завершаем обработку запроса и возвращаем результат клиенту
-    /* return */ res.end();
+    return res.end();
   }
 
   next();
