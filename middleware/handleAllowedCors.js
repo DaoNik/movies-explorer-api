@@ -1,5 +1,5 @@
 const allowedCors = [
-  'http://localhost:3001',
+  'http://localhost:3000',
   'http://daonik.nomoredomains.work',
   'https://daonik.nomoredomains.work',
 ];
