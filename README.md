@@ -8,12 +8,7 @@
 
 ### Ссылка на проект
 
-https://api.pro100grog.students.nomoredomains.work/
-
-### Планы по улучшению
-
-- Добавить rate limiter
-- Добавить роут для всех фильмов
+https://api.pro100grog.students.nomoredomains.work/ (сейчас не работает)
 
 ### Используемые технологии
 
